@@ -1,0 +1,5 @@
+dispositivo: {Celular, temperatura}
+dispositivo: {ArCondicionado}
+set temperatura = 31.
+se temperatura > 30 entao ligar ArCondicionado.
+enviar alerta ("Muito quente", temperatura) Celular.
