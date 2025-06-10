@@ -2,7 +2,7 @@ from sly import Lexer
 
 class ObsActLexer(Lexer):
     tokens = {
-        NUM, BOOL, ID, OBSERVATION, MSG,
+        NUM, BOOL, ID, MSG,
         GT, LT, GE, LE, EQ, NE,
         AND,
         SET, SE, ENTAO, SENAO,
@@ -11,7 +11,7 @@ class ObsActLexer(Lexer):
         DISPOSITIVO, PARATODOS
     }
 
-    literals = {':', ',', '{', '}', '(', ')', '.'}
+    literals = {':', ',', '{', '}', '(', ')', '.', '='}
 
     ignore = ' \t'
     ignore_comment = r'\#.*'
@@ -71,11 +71,9 @@ class ObsActLexer(Lexer):
         elif t.value == 'para':
             t.type = 'PARATODOS'  # This will need special handling for "para todos"
         else:
-            # Check if this looks like an observation variable (lowercase)
-            if t.value.islower():
-                t.type = 'OBSERVATION'
-            else:
-                t.type = 'ID'  # Device names, etc.
+            # For now, treat all non-keyword identifiers as either ID or OBSERVATION
+            # We'll let the parser context determine the difference
+            t.type = 'ID'
         return t
 
     @_(r'\n+')
