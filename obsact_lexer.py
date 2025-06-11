@@ -16,7 +16,6 @@ class ObsActLexer(Lexer):
     ignore = ' \t'
     ignore_comment = r'\#.*'
 
-    # Keywords (these need to be defined before the general ID pattern)
     SET      = r'set'
     SE       = r'se'
     ENTAO    = r'entao'
@@ -28,12 +27,11 @@ class ObsActLexer(Lexer):
     DISPOSITIVO = r'dispositivo'
     PARATODOS   = r'para\s+todos'
 
-    # Operators
     AND = r'&&'
-    GE  = r'>='  # >= must come before >
-    LE  = r'<='  # <= must come before <
-    NE  = r'!='  # != must come before =
-    EQ  = r'=='  # == must come before =
+    GE  = r'>='  
+    LE  = r'<='  
+    NE  = r'!='  
+    EQ  = r'=='  
     GT  = r'>'
     LT  = r'<'
 
@@ -56,10 +54,8 @@ class ObsActLexer(Lexer):
     def EQ(self, t):
         return t
 
-    # General identifier pattern - this should come after all keywords
     @_(r'[a-zA-Z_][a-zA-Z0-9_]*')
     def ID(self, t):
-        # Check if it's a keyword, if so return the appropriate token type
         if t.value.lower() in {
             'set', 'se', 'entao', 'senao', 'enviar', 'alerta', 
             'ligar', 'desligar', 'dispositivo'
@@ -81,5 +77,5 @@ class ObsActLexer(Lexer):
         self.lineno += len(t.value)
 
     def error(self, t):
-        print(f"Caractere ilegal '{t.value[0]}' na linha {self.lineno}")
-        self.index += 1
+        print(f"✗ Erro léxico: Caractere ilegal '{t.value[0]}' na linha {self.lineno}")
+        raise SyntaxError(f"Caractere ilegal '{t.value[0]}' na linha {self.lineno}")
